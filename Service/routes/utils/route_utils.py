@@ -5,9 +5,9 @@ import os
 
 def _get_base_dir():
     
-    _base_dir = Path(__file__).resolve().parent.parent
+    base_dir = Path(__file__).resolve().parent.parent
     
-    return _base_dir
+    return base_dir
 
 
 def open_route_file():

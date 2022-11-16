@@ -1,3 +1,6 @@
+**/__pycache__**
+/.vscode/**
+/Service/test/test.txt
 /node_modules
 /.pnp
 .pnp.js
