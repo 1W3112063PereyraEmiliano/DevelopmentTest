@@ -21,10 +21,10 @@ def write_in_txt_file(txt = ''):
             
             f.write(_txt_to_write)
         
-        return True, 'El texto fue escrito con éxito en tu archivo test.txt!'
+        return True, '¡The text was written successfully!'
         
     except Exception as e:
         
         #lg
         
-        return False, 'Ha ocurrido un problema en el módulo escritor de textos'
+        return False, 'A problem has occurred in the text writer module...'
