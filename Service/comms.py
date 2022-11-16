@@ -21,4 +21,5 @@ def write_line(text_to_write = ''):
         pass   
 
 if __name__.__eq__('__main__'):
-    _service.run()
+    
+    _service.run(debug=False,load_dotenv=False,port=8000)
