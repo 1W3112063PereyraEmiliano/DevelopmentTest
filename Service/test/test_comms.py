@@ -9,7 +9,7 @@ def test():
         
         default_endpoint = '/writeline'
         
-        url = 'http://localhost:5000{}'.format(default_endpoint)
+        url = 'http://localhost:8000{}'.format(default_endpoint)
         response = urlopen(url)
         data = json.loads(response.read())
         
