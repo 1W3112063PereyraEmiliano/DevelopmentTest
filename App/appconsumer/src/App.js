@@ -1,6 +1,6 @@
 import './App.css';
 import { useState } from 'react';
-import { Badge, Col, Container, Row, Button, Form, Stack, Alert } from 'react-bootstrap'
+import { Badge, Col, Container, Row, Button, Form, Stack, Alert, Card } from 'react-bootstrap'
 import { FiSend } from 'react-icons/fi'
 import { GiConfirmed, GiCancel } from 'react-icons/gi'
 import axios from 'axios';
@@ -9,6 +9,7 @@ function App() {
 
   const [text, setText] = useState('');
   const [dataFromResult, setDataFromResult] = useState()
+  const [dataFromReadResult, setDataFromReadResult] = useState()
   const [show, setShow] = useState(false)
   const [isConnected, setIsConnected] = useState(false)
   const [messageConnected, setMessageConnected] = useState('')
@@ -21,6 +22,8 @@ function App() {
   };
 
   // --------------- Service calls ---------------
+
+  // Apps
 
   const writeInFile = async () => {
 
@@ -66,6 +69,41 @@ function App() {
     }
 
   }
+
+  const readInFile = async () => {
+
+    if (isConnected) {
+
+      const result = {}
+
+      const res = await axios.get('read/txt').then((response) => {
+        result.message = response.data.response
+        result.status = response.status
+      }).catch((error) => {
+        if (error.response) {
+          result.message = error.response.data.response
+          result.status = error.response.status
+        }
+      })
+
+      setDataFromReadResult(result)
+
+    } else {
+
+      setShowAlertForDisconnected(true)
+
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          setShowAlertForDisconnected(false)
+          resolve();
+        }, 2000)
+      });
+
+    }
+
+  }
+
+  // Security
 
   const canConnect = async () => {
 
@@ -172,7 +210,7 @@ function App() {
           <Row>
             <Col md="12">
               <Stack gap={2} className="col-md-5 mx-auto">
-                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                <Form.Group className="mb-3">
                   <Form.Label>Type text to write in .txt</Form.Label>
                   <Form.Control maxLength={256} value={text} onChange={handleChange} as="textarea" rows={4} />
                 </Form.Group>
@@ -239,6 +277,73 @@ function App() {
                     Could not establish connection with the Service, are you sure that it is turned on?
                   </h6>
                 </Alert>
+              </Stack>
+            </Col>
+          </Row>
+        </Container>
+
+        <Container>
+          <Row>
+            <Col md="12">
+              <Stack gap={2} className="col-md-5 mx-auto">
+                <Form.Group className="mb-3">
+                  <Form.Label>Read text from .txt</Form.Label>
+                  {
+                    dataFromReadResult && (
+                      <>
+                        {
+                          dataFromReadResult.status === 200 && (
+                            <>
+                              <Row>
+                                <Col md="12">
+                                  <Card
+                                    bg={'dark'}
+                                    key={'dark'}
+                                    text={'white'}
+                                    className="card-text-left"
+                                  >
+                                    <Card.Body>
+                                      <Card.Text>
+                                        <h6>
+                                          {dataFromReadResult.message}
+                                        </h6>
+                                      </Card.Text>
+                                    </Card.Body>
+                                  </Card>
+                                </Col>
+                              </Row>
+                            </>
+                          )
+                        }
+                        {
+                          dataFromReadResult.status === 500 && (
+                            <>
+                              <Row>
+                                <Col md="12">
+                                  <Card
+                                    bg={'danger'}
+                                    key={'danger'}
+                                    text={'white'}
+                                    className="card-text-left"
+                                  >
+                                    <Card.Body>
+                                      <Card.Text>
+                                        <h6>
+                                          {dataFromReadResult.message}
+                                        </h6>
+                                      </Card.Text>
+                                    </Card.Body>
+                                  </Card>
+                                </Col>
+                              </Row>
+                            </>
+                          )
+                        }
+                      </>
+                    )
+                  }
+                </Form.Group>
+                <Button onClick={readInFile} variant="secondary">Generate text</Button>
               </Stack>
             </Col>
           </Row>
