@@ -177,10 +177,24 @@ function App() {
       }
     })
 
-    if (result.status !== 200) {
+    if (result.status === 401) {
 
       setIsConnected(false)
       token = ''
+
+    }else if (result.status === 500){
+
+      setIsConnected(false)
+      token = ''
+
+      setShowAlertForServiceError(true)
+
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          setShowAlertForServiceError(false)
+          resolve();
+        }, 4000)
+      });      
 
     }
 
