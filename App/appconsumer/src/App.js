@@ -10,20 +10,112 @@ function App() {
   const [text, setText] = useState('');
   const [dataFromResult, setDataFromResult] = useState()
   const [show, setShow] = useState(false)
+  const [isConnected, setIsConnected] = useState(false)
+  const [messageConnected, setMessageConnected] = useState('')
+  const [showAlertForDisconnected, setShowAlertForDisconnected] = useState(false)
+  let token = ''
 
   const handleChange = event => {
     setText(event.target.value);
   };
 
+  // --------------- Service calls ---------------
+
   const writeInFile = async () => {
 
-    const textToWrite = {
-      'text': text
+    if (isConnected) {
+
+      const textToWrite = {
+        'text': text
+      }
+
+      const result = {}
+
+      const res = await axios.post('write/txt', textToWrite).then((response) => {
+        result.message = response.data.response
+        result.status = response.status
+      }).catch((error) => {
+        if (error.response) {
+          result.message = error.response.data.response
+          result.status = error.response.status
+        }
+      })
+
+      setDataFromResult(result)
+      setShow(true)
+
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          setShow(false)
+          resolve();
+        }, 2000)
+      });
+
+    } else {
+
+      setShowAlertForDisconnected(true)
+
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          setShowAlertForDisconnected(false)
+          resolve();
+        }, 2000)
+      });
+
     }
+
+  }
+
+  const canConnect = async () => {
+
+    if (!isConnected) {
+
+      const result = {}
+
+      const res = await axios.post('create/token').then((response) => {
+        result.message = response.data.response
+        result.status = response.status
+        result.token = response.data.token
+      }).catch((error) => {
+        if (error.response) {
+          result.message = error.response.data.response
+          result.status = error.response.status
+        }
+      })
+
+      if (result.status === 200) {
+
+        token = result.token
+        setMessageConnected('Connected')
+        setIsConnected(true)
+        setShowAlertForDisconnected(false)
+
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            verifyToken()
+            resolve();
+          }, 60000)
+        });
+
+      }
+
+    } else {
+
+      setMessageConnected('You are already connected!')
+
+    }
+
+  }
+
+  const verifyToken = async () => {
 
     const result = {}
 
-    const res = await axios.post('writeline', textToWrite).then((response) => {
+    const res = await axios.get('verify/token', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then((response) => {
       result.message = response.data.response
       result.status = response.status
     }).catch((error) => {
@@ -33,15 +125,12 @@ function App() {
       }
     })
 
-    setDataFromResult(result)
-    setShow(true)
+    if (result.status !== 200) {
 
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        setShow(false)
-        resolve();
-      }, 2000)
-    });
+      setIsConnected(false)
+      token = ''
+
+    }
 
   }
 
@@ -49,9 +138,21 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h3>
-          App Consumer <Button variant="dark">
-            Connected <Badge bg="success"> <GiConfirmed></GiConfirmed> </Badge>
-            <span className="visually-hidden">unread messages</span>
+          App Consumer <Button variant="dark" onClick={canConnect}>
+            {
+              isConnected && (
+                <>
+                  {messageConnected} <Badge bg="success"> <GiConfirmed></GiConfirmed> </Badge>
+                </>
+              )
+            }
+            {
+              !isConnected && (
+                <>
+                  Disconnected <Badge bg="danger"> <GiCancel></GiCancel> </Badge>
+                </>
+              )
+            }
           </Button>
         </h3>
 
@@ -107,8 +208,18 @@ function App() {
               </>
             )
           }
+          <Row>
+            <Col md="12">
+              <Stack gap={2} className="col-md-5 mx-auto mt-1">
+                <Alert show={showAlertForDisconnected} key={'warning'} variant={'warning'}>
+                  <h6>
+                    You're not online!
+                  </h6>
+                </Alert>
+              </Stack>
+            </Col>
+          </Row>
         </Container>
-
       </header>
     </div >
   );
