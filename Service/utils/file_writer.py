@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+from datetime import datetime
 
 
 def _get_base_dir():
@@ -9,11 +10,21 @@ def _get_base_dir():
     return base_dir
 
 
-def write_in_txt_file(txt = ''):
+def write_in_txt_file(txt = '',add_date = False):
     
     try:
         
-        _txt_to_write = txt
+        _txt_to_write = ''
+        
+        if add_date:
+            
+            now = datetime.now()
+
+            date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
+            
+            _txt_to_write = date_time + '\n'
+        
+        _txt_to_write += txt
         
         _base_dir = os.path.join(_get_base_dir(),'test/test.txt')
         

@@ -14,8 +14,9 @@ def write_line():
     try:
         
         _text_request = request.json.get('text')
+        _add_date = request.json.get('add_date')
         
-        _response_from_module, _message = FileWriter.write_in_txt_file(_text_request)
+        _response_from_module, _message = FileWriter.write_in_txt_file(_text_request,_add_date)
         
         if _response_from_module:
             
