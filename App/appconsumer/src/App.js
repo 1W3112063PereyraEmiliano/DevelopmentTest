@@ -268,7 +268,7 @@ function App() {
                         type={'checkbox'}
                         id={`default`}
                         label={`Add server date and time`}
-                        className="card-text-left font-size-checkbox text-info"
+                        className="font-size-checkbox text-info"
                         onChange={() => { setAddDate(!addDate) }}
                         checked={addDate}
                       />
