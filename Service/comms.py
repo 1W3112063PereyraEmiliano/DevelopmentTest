@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, request
 from routes import routes as Routes
 from utils import file_writer as FileWriter
+from security.routes import auth
 
 _service = Flask(__name__)
+_service.register_blueprint(auth.routes_auth)
 
-
+# APPS
 @_service.route(Routes.get_a_specific_route(route_name = "WRITE_LINE"),methods=['POST'])
 def write_line():
     
@@ -30,7 +32,8 @@ def write_line():
         
     except Exception as e:
         
-        pass   
+        pass
+
 
 if __name__.__eq__('__main__'):
     

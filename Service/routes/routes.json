@@ -1,3 +1,5 @@
 {
-    "WRITE_LINE": "writeline" 
+    "WRITE_LINE": "write/txt",
+    "CREATE_TOKEN": "create/token",
+    "VERIFY_TOKEN": "verify/token"
 }
