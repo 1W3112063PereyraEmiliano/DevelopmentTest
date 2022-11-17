@@ -13,6 +13,7 @@ function App() {
   const [isConnected, setIsConnected] = useState(false)
   const [messageConnected, setMessageConnected] = useState('')
   const [showAlertForDisconnected, setShowAlertForDisconnected] = useState(false)
+  const [showAlertForServiceError, setShowAlertForServiceError] = useState(false)
   let token = ''
 
   const handleChange = event => {
@@ -95,6 +96,17 @@ function App() {
             verifyToken()
             resolve();
           }, 60000)
+        });
+
+      } else if (result.status === 500) {
+
+        setShowAlertForServiceError(true)
+
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            setShowAlertForServiceError(false)
+            resolve();
+          }, 4000)
         });
 
       }
@@ -214,6 +226,17 @@ function App() {
                 <Alert show={showAlertForDisconnected} key={'warning'} variant={'warning'}>
                   <h6>
                     You're not online!
+                  </h6>
+                </Alert>
+              </Stack>
+            </Col>
+          </Row>
+          <Row>
+            <Col md="12">
+              <Stack gap={2} className="col-md-5 mx-auto mt-1">
+                <Alert show={showAlertForServiceError} key={'danger'} variant={'danger'}>
+                  <h6>
+                    Could not establish connection with the Service, are you sure that it is turned on?
                   </h6>
                 </Alert>
               </Stack>
