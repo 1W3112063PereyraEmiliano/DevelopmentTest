@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from routes import routes as Routes
 from utils import file_writer as FileWriter
+from utils import file_reader as FileReader
 from security.routes import auth
 
 _service = Flask(__name__)
@@ -15,6 +16,32 @@ def write_line():
         _text_request = request.json.get('text')
         
         _response_from_module, _message = FileWriter.write_in_txt_file(_text_request)
+        
+        if _response_from_module:
+            
+            _code_response = 200
+            
+        else:
+            
+            _code_response = 500
+            
+        _result = {
+            'response': _message
+        }
+            
+        return jsonify(_result), _code_response
+        
+    except Exception as e:
+        
+        pass
+
+
+@_service.route(Routes.get_a_specific_route(route_name = "READ_LINE"))
+def read_line():
+    
+    try:
+        
+        _response_from_module, _message = FileReader.read_in_txt_file()
         
         if _response_from_module:
             

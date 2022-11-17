@@ -1,5 +1,6 @@
 {
     "WRITE_LINE": "write/txt",
+    "READ_LINE": "read/txt",
     "CREATE_TOKEN": "create/token",
     "VERIFY_TOKEN": "verify/token"
 }
