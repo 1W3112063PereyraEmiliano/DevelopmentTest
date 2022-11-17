@@ -15,6 +15,7 @@ function App() {
   const [messageConnected, setMessageConnected] = useState('')
   const [showAlertForDisconnected, setShowAlertForDisconnected] = useState(false)
   const [showAlertForServiceError, setShowAlertForServiceError] = useState(false)
+  const [addDate, setAddDate] = useState(false)
   let token = ''
 
   const handleChange = event => {
@@ -30,7 +31,8 @@ function App() {
     if (isConnected) {
 
       const textToWrite = {
-        'text': text
+        'text': text,
+        'add_date': addDate
       }
 
       const result = {}
@@ -212,6 +214,14 @@ function App() {
               <Stack gap={2} className="col-md-5 mx-auto">
                 <Form.Group className="mb-3">
                   <Form.Label>Type text to write in .txt</Form.Label>
+                  <Form.Check
+                    type={'checkbox'}
+                    id={`default`}
+                    label={`Add server date and time`}
+                    className="card-text-left font-size-checkbox text-info"
+                    onChange={() => { setAddDate(!addDate) }}
+                    checked={addDate}
+                  />
                   <Form.Control maxLength={256} value={text} onChange={handleChange} as="textarea" rows={4} />
                 </Form.Group>
                 <Button onClick={writeInFile} variant="secondary"> <FiSend></FiSend> Submit</Button>
