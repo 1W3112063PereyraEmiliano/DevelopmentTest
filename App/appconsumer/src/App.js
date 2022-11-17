@@ -1,6 +1,6 @@
 import './App.css';
 import { useState } from 'react';
-import { Badge, Col, Container, Row, Button, Form, Stack, Alert, Card } from 'react-bootstrap'
+import { Badge, Col, Container, Row, Button, Form, Alert, Card } from 'react-bootstrap'
 import { FiSend } from 'react-icons/fi'
 import { GiConfirmed, GiCancel } from 'react-icons/gi'
 import axios from 'axios';
@@ -47,18 +47,34 @@ function App() {
         }
       })
 
-      setDataFromResult(result)
-      setShow(true)
+      if (result.status === 200) {
 
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          setShow(false)
-          resolve();
-        }, 2000)
-      });
+        setDataFromResult(result)
+        setShow(true)
+
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            setShow(false)
+            resolve();
+          }, 2000)
+        });
+
+      } else {
+
+        setIsConnected(false)
+        setShowAlertForServiceError(true)
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            setShowAlertForServiceError(false)
+            resolve();
+          }, 4000)
+        });
+
+      }
 
     } else {
 
+      setShowAlertForServiceError(false)
       setShowAlertForDisconnected(true)
 
       return new Promise((resolve) => {
@@ -88,7 +104,23 @@ function App() {
         }
       })
 
-      setDataFromReadResult(result)
+      if (result.status === 200) {
+
+        setDataFromReadResult(result)
+
+      } else {
+
+        setIsConnected(false)
+        setShowAlertForServiceError(true)
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            setShowAlertForServiceError(false)
+            resolve();
+          }, 4000)
+        });
+
+      }
+
 
     } else {
 
@@ -140,6 +172,7 @@ function App() {
 
       } else if (result.status === 500) {
 
+        setShowAlertForDisconnected(false)
         setShowAlertForServiceError(true)
 
         return new Promise((resolve) => {
@@ -182,7 +215,7 @@ function App() {
       setIsConnected(false)
       token = ''
 
-    }else if (result.status === 500){
+    } else if (result.status === 500) {
 
       setIsConnected(false)
       token = ''
@@ -194,14 +227,14 @@ function App() {
           setShowAlertForServiceError(false)
           resolve();
         }, 4000)
-      });      
+      });
 
     }
 
   }
 
   return (
-    <div className="App">
+    <div>
       <header className="App-header">
         <h3>
           App Consumer <Button variant="dark" onClick={canConnect}>
@@ -221,158 +254,153 @@ function App() {
             }
           </Button>
         </h3>
-
-        <Container>
-          <Row>
-            <Col md="12">
-              <Stack gap={2} className="col-md-5 mx-auto">
-                <Form.Group className="mb-3">
-                  <Form.Label>Type text to write in .txt</Form.Label>
-                  <Form.Check
-                    type={'checkbox'}
-                    id={`default`}
-                    label={`Add server date and time`}
-                    className="card-text-left font-size-checkbox text-info"
-                    onChange={() => { setAddDate(!addDate) }}
-                    checked={addDate}
-                  />
-                  <Form.Control maxLength={256} value={text} onChange={handleChange} as="textarea" rows={4} />
-                </Form.Group>
-                <Button onClick={writeInFile} variant="secondary"> <FiSend></FiSend> Submit</Button>
-              </Stack>
-            </Col>
-          </Row>
-          {
-            dataFromResult && (
-              <>
-                {
-                  dataFromResult.status === 200 && (
-                    <>
-                      <Row>
-                        <Col md="12">
-                          <Stack gap={2} className="col-md-5 mx-auto mt-1">
-                            <Alert show={show} key={'success'} variant={'success'}>
-                              <h6>
-                                {dataFromResult.message}
-                              </h6>
-                            </Alert>
-                          </Stack>
-                        </Col>
-                      </Row>
-                    </>
-                  )
-                }
-                {
-                  dataFromResult.status === 500 && (
-                    <>
-                      <Row>
-                        <Col md="12">
-                          <Stack gap={2} className="col-md-5 mx-auto mt-1">
-                            <Alert show={show} key={'danger'} variant={'danger'}>
-                              <h6>
-                                {dataFromResult.message}
-                              </h6>
-                            </Alert>
-                          </Stack>
-                        </Col>
-                      </Row>
-                    </>
-                  )
-                }
-              </>
-            )
-          }
-          <Row>
-            <Col md="12">
-              <Stack gap={2} className="col-md-5 mx-auto mt-1">
-                <Alert show={showAlertForDisconnected} key={'warning'} variant={'warning'}>
-                  <h6>
-                    You're not online!
-                  </h6>
-                </Alert>
-              </Stack>
-            </Col>
-          </Row>
-          <Row>
-            <Col md="12">
-              <Stack gap={2} className="col-md-5 mx-auto mt-1">
-                <Alert show={showAlertForServiceError} key={'danger'} variant={'danger'}>
-                  <h6>
-                    Could not establish connection with the Service, are you sure that it is turned on?
-                  </h6>
-                </Alert>
-              </Stack>
-            </Col>
-          </Row>
-        </Container>
-
-        <Container>
-          <Row>
-            <Col md="12">
-              <Stack gap={2} className="col-md-5 mx-auto">
-                <Form.Group className="mb-3">
-                  <Form.Label>Read text from .txt</Form.Label>
-                  {
-                    dataFromReadResult && (
-                      <>
-                        {
-                          dataFromReadResult.status === 200 && (
-                            <>
-                              <Row>
-                                <Col md="12">
-                                  <Card
-                                    bg={'dark'}
-                                    key={'dark'}
-                                    text={'white'}
-                                    className="card-text-left"
-                                  >
-                                    <Card.Body>
-                                      <Card.Text>
-                                        <h6>
-                                          {dataFromReadResult.message}
-                                        </h6>
-                                      </Card.Text>
-                                    </Card.Body>
-                                  </Card>
-                                </Col>
-                              </Row>
-                            </>
-                          )
-                        }
-                        {
-                          dataFromReadResult.status === 500 && (
-                            <>
-                              <Row>
-                                <Col md="12">
-                                  <Card
-                                    bg={'danger'}
-                                    key={'danger'}
-                                    text={'white'}
-                                    className="card-text-left"
-                                  >
-                                    <Card.Body>
-                                      <Card.Text>
-                                        <h6>
-                                          {dataFromReadResult.message}
-                                        </h6>
-                                      </Card.Text>
-                                    </Card.Body>
-                                  </Card>
-                                </Col>
-                              </Row>
-                            </>
-                          )
-                        }
-                      </>
-                    )
-                  }
-                </Form.Group>
-                <Button onClick={readInFile} variant="secondary">Generate text</Button>
-              </Stack>
-            </Col>
-          </Row>
-        </Container>
       </header>
+      <div className="bg-grey">
+        <Container fluid>
+          <Row>
+            <Col lg="4">
+              <Container fluid>
+                <Row>
+                  <Col className="mb-2" lg="12">
+                    <Form.Group className="mb-3">
+                      <Form.Label className="text-light">Type text to write in .txt</Form.Label>
+                      <Form.Check
+                        type={'checkbox'}
+                        id={`default`}
+                        label={`Add server date and time`}
+                        className="card-text-left font-size-checkbox text-info"
+                        onChange={() => { setAddDate(!addDate) }}
+                        checked={addDate}
+                      />
+                      <Form.Control maxLength={256} value={text} onChange={handleChange} as="textarea" rows={3} />
+                    </Form.Group>
+                    <div className="d-grid gap-2">
+                      <Button onClick={writeInFile} variant="secondary"> <FiSend></FiSend> Submit</Button>
+                    </div>
+                  </Col>
+                </Row>
+                {
+                  dataFromResult && (
+                    <>
+                      {
+                        dataFromResult.status === 200 && (
+                          <>
+                            <Row>
+                              <Col md="12">
+                                <Alert show={show} key={'success'} variant={'success'}>
+                                  <h6>
+                                    {dataFromResult.message}
+                                  </h6>
+                                </Alert>
+                              </Col>
+                            </Row>
+                          </>
+                        )
+                      }
+                      {
+                        dataFromResult.status === 500 && (
+                          <>
+                            <Row>
+                              <Col md="12">
+                                <Alert show={show} key={'danger'} variant={'danger'}>
+                                  <h6>
+                                    {dataFromResult.message}
+                                  </h6>
+                                </Alert>
+                              </Col>
+                            </Row>
+                          </>
+                        )
+                      }
+                    </>
+                  )
+                }
+                <Row>
+                  <Col md="12">
+                    <Alert show={showAlertForDisconnected} key={'warning'} variant={'warning'}>
+                      <h6>
+                        You're not online!
+                      </h6>
+                    </Alert>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md="12">
+                    <Alert show={showAlertForServiceError} key={'danger'} variant={'danger'}>
+                      <h6>
+                        Could not establish connection with the Service, are you sure that it is turned on?
+                      </h6>
+                    </Alert>
+                  </Col>
+                </Row>
+              </Container>
+
+              <Container fluid className="mt-1">
+                <Row>
+                  <Col md="12">
+                    <Form.Group className="mb-3">
+                      <Form.Label className="text-light">Read text from .txt</Form.Label>
+                      {
+                        dataFromReadResult && (
+                          <>
+                            {
+                              dataFromReadResult.status === 200 && (
+                                <>
+                                  <Col md="12">
+                                    <Card
+                                      bg={'dark'}
+                                      key={'dark'}
+                                      text={'white'}
+                                      className="card-text-left"
+                                    >
+                                      <Card.Body>
+                                        <Card.Text>
+                                          <h6>
+                                            {dataFromReadResult.message}
+                                          </h6>
+                                        </Card.Text>
+                                      </Card.Body>
+                                    </Card>
+                                  </Col>
+                                </>
+                              )
+                            }
+                            {
+                              dataFromReadResult.status === 500 && (
+                                <>
+                                  <Col md="12">
+                                    <Card
+                                      bg={'danger'}
+                                      key={'danger'}
+                                      text={'white'}
+                                      className="card-text-left"
+                                    >
+                                      <Card.Body>
+                                        <Card.Text>
+                                          <h6>
+                                            {dataFromReadResult.message}
+                                          </h6>
+                                        </Card.Text>
+                                      </Card.Body>
+                                    </Card>
+                                  </Col>
+                                </>
+                              )
+                            }
+                          </>
+                        )
+                      }
+                    </Form.Group>
+                    <div className="d-grid gap-2">
+                      <Button onClick={readInFile} variant="secondary">Generate text</Button>
+                    </div>
+                  </Col>
+                </Row>
+              </Container>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     </div >
   );
 }
