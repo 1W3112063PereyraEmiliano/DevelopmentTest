@@ -345,7 +345,7 @@ function App() {
 
     } else {
 
-      setMessageConnected('You are already connected!')
+      setMessageConnected('Already connected!')
 
     }
 
@@ -397,7 +397,7 @@ function App() {
       <header className="App-header">
         <Container fluid>
           <Row>
-            <Col lg="8">
+            <Col xxl="8" xl="8" lg="8" md="12" sm="12" xs="12">
               <h3>
                 App Consumer <Button variant="dark" onClick={canConnect}>
                   {
@@ -417,16 +417,16 @@ function App() {
                 </Button>
               </h3>
             </Col>
-            <Col lg="4">
+            <Col xxl="4" xl="4" lg="4" md="12" sm="12" xs="12">
               <Row>
-                <Col md="12">
+                <Col xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                   <Alert show={showAlertForDisconnected} key={'warning'} variant={'warning'}>
                     <h6>You're not online!</h6>
                   </Alert>
                 </Col>
               </Row>
               <Row>
-                <Col md="12">
+                <Col xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                   <Alert show={showAlertForServiceError} key={'danger'} variant={'danger'}>
                     <h6>
                       Could not establish connection with the Service, are you sure that it is turned on?
@@ -441,10 +441,10 @@ function App() {
       <div className="bg-grey">
         <Container fluid>
           <Row>
-            <Col lg="4">
+            <Col xxl="4" xl="4" lg="4" md="12" sm="12" xs="12">
               <Container fluid>
                 <Row>
-                  <Col className="mb-2 mt-2" lg="12">
+                  <Col className="mb-2 mt-2" xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                     <Form.Group className="mb-3">
                       <Form.Label className="text-light">Type text to write in .txt</Form.Label>
                       <Form.Check
@@ -469,7 +469,7 @@ function App() {
                         dataFromResult.status === 200 && (
                           <>
                             <Row>
-                              <Col md="12">
+                              <Col xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                                 <Alert show={show} key={'success'} variant={'success'}>
                                   <h6>
                                     {dataFromResult.message}
@@ -484,7 +484,7 @@ function App() {
                         dataFromResult.status === 500 && (
                           <>
                             <Row>
-                              <Col md="12">
+                              <Col xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                                 <Alert show={show} key={'danger'} variant={'danger'}>
                                   <h6>
                                     {dataFromResult.message}
@@ -502,7 +502,7 @@ function App() {
 
               <Container fluid className="mt-1">
                 <Row>
-                  <Col md="12">
+                  <Col xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                     <Form.Group className="mb-3">
                       <Form.Label className="text-light">Read text from .txt</Form.Label>
                       {
@@ -511,7 +511,7 @@ function App() {
                             {
                               dataFromReadResult.status === 200 && (
                                 <>
-                                  <Col md="12">
+                                  <Col xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                                     <Card
                                       bg={'dark'}
                                       key={'dark'}
@@ -533,7 +533,7 @@ function App() {
                             {
                               dataFromReadResult.status === 500 && (
                                 <>
-                                  <Col md="12">
+                                  <Col xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                                     <Card
                                       bg={'danger'}
                                       key={'danger'}
@@ -564,10 +564,10 @@ function App() {
               </Container>
             </Col>
 
-            <Col lg="8">
+            <Col xxl="8" xl="8" lg="8" md="12" sm="12" xs="12">
               <Container fluid>
                 <Row>
-                  <Col className="mb-2 mt-2" lg="12">
+                  <Col className="mb-2 mt-2" xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                     <Form.Group>
                       <Form.Label className="text-light">Order Management</Form.Label>
                     </Form.Group>
@@ -579,10 +579,10 @@ function App() {
                       <Card.Header>
                         <Container fluid>
                           <Row>
-                            <Col lg="11">
+                            <Col xxl="11" xl="11" lg="11" md="11" sm="11" xs="10">
                               Number of orders by state
                             </Col>
-                            <Col lg="1">
+                            <Col xxl="1" xl="1" lg="1" md="1" sm="1" xs="2">
                               <Button onClick={() => { setHideBody1(!hideBody1) }} className="btn-sm btn-dark bg-transparent">
                                 {
                                   hideBody1 && (
@@ -613,10 +613,10 @@ function App() {
                                     return (
                                       <div key={item.status}>
                                         <Row>
-                                          <Col lg="11" md="11">
+                                          <Col xxl="11" xl="11" lg="11" md="11" sm="11" xs="10">
                                             Estado {item.status}
                                           </Col>
-                                          <Col className="text-info" lg="1" md="1">
+                                          <Col className="text-info" xxl="1" xl="1" lg="1" md="1" sm="1" xs="2">
                                             {item.count}
                                           </Col>
                                         </Row>
@@ -625,7 +625,7 @@ function App() {
                                   })
                                 }
                                 <Row>
-                                  <Col className="text-center" lg="12">
+                                  <Col className="text-center" xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                                     <Button className="btn-sm" onClick={getOrdersByState} variant="secondary">Refresh data</Button>
                                   </Col>
                                 </Row>
@@ -638,7 +638,7 @@ function App() {
                             <>
                               <Container>
                                 <Row>
-                                  <Col className="text-center" lg="12">
+                                  <Col className="text-center" xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                                     <Button className="btn-sm" onClick={getOrdersByState} variant="secondary">View data</Button>
                                   </Col>
                                 </Row>
@@ -652,7 +652,7 @@ function App() {
                 </Row>
 
                 <Row>
-                  <Col className="mb-2 mt-2" lg="12">
+                  <Col className="mb-2 mt-2" xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                     <Card
                       bg="dark"
                       key={"dark"}
@@ -661,10 +661,10 @@ function App() {
                       <Card.Header>
                         <Container fluid>
                           <Row>
-                            <Col lg="11">
+                            <Col xxl="11" xl="11" lg="11" md="11" sm="11" xs="10">
                               Orders in routes
                             </Col>
-                            <Col lg="1">
+                            <Col xxl="1" xl="1" lg="1" md="1" sm="1" xs="2">
                               <Button onClick={() => { setHideBody2(!hideBody2) }} className="btn-sm btn-dark bg-transparent">
                                 {
                                   hideBody2 && (
@@ -745,7 +745,7 @@ function App() {
                             <>
                               <Container>
                                 <Row>
-                                  <Col className="text-center" lg="12">
+                                  <Col className="text-center" xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                                     <Button className="btn-sm" onClick={getOrdersInRoutes} variant="secondary">View data</Button>
                                   </Col>
                                 </Row>
@@ -758,7 +758,7 @@ function App() {
                             <>
                               <Container>
                                 <Row>
-                                  <Col className="text-center" lg="12">
+                                  <Col className="text-center" xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                                     <Button className="btn-sm" onClick={getOrdersInRoutes} variant="secondary">Refresh data</Button>
                                   </Col>
                                 </Row>
@@ -772,7 +772,7 @@ function App() {
                 </Row>
 
                 <Row>
-                  <Col className="mb-2 mt-2" lg="12">
+                  <Col className="mb-2 mt-2" xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                     <Card
                       bg="dark"
                       key={"dark"}
@@ -781,10 +781,10 @@ function App() {
                       <Card.Header>
                         <Container fluid>
                           <Row>
-                            <Col lg="11">
+                            <Col xxl="11" xl="11" lg="11" md="11" sm="11" xs="10">
                               Orders with some value in field
                             </Col>
-                            <Col lg="1">
+                            <Col xxl="1" xl="1" lg="1" md="1" sm="1" xs="2">
                               <Button onClick={() => { setHideBody3(!hideBody3) }} className="btn-sm btn-dark bg-transparent">
                                 {
                                   hideBody3 && (
@@ -859,7 +859,7 @@ function App() {
                             <>
                               <Container>
                                 <Row>
-                                  <Col className="text-center" lg="12">
+                                  <Col className="text-center" xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                                     <Button className="btn-sm" onClick={getOrdersWithDateInField} variant="secondary">View data</Button>
                                   </Col>
                                 </Row>
@@ -872,7 +872,7 @@ function App() {
                             <>
                               <Container>
                                 <Row>
-                                  <Col className="text-center" lg="12">
+                                  <Col className="text-center" xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
                                     <Button className="btn-sm" onClick={getOrdersWithDateInField} variant="secondary">Refresh data</Button>
                                   </Col>
                                 </Row>
@@ -890,7 +890,7 @@ function App() {
           </Row>
         </Container>
       </div>
-    </div>
+    </div >
   );
 }
 
