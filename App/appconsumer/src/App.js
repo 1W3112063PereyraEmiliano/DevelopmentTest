@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Badge, Col, Container, Row, Button, Form, Alert, Card, Table } from 'react-bootstrap'
 import { FiSend } from 'react-icons/fi'
 import { GiConfirmed, GiCancel } from 'react-icons/gi'
+import { MdExpandLess, MdExpandMore } from 'react-icons/md'
 import axios from 'axios';
 
 function App() {
@@ -19,6 +20,9 @@ function App() {
   const [showAlertForDisconnected, setShowAlertForDisconnected] = useState(false)
   const [showAlertForServiceError, setShowAlertForServiceError] = useState(false)
   const [addDate, setAddDate] = useState(false)
+  const [hideBody1, setHideBody1] = useState(false)
+  const [hideBody2, setHideBody2] = useState(false)
+  const [hideBody3, setHideBody3] = useState(false)
   let token = ''
 
   const handleChange = event => {
@@ -573,9 +577,33 @@ function App() {
                       text={'white'}
                     >
                       <Card.Header>
-                        Number of orders by state
+                        <Container fluid>
+                          <Row>
+                            <Col lg="11">
+                              Number of orders by state
+                            </Col>
+                            <Col lg="1">
+                              <Button onClick={() => { setHideBody1(!hideBody1) }} className="btn-sm btn-dark bg-transparent">
+                                {
+                                  hideBody1 && (
+                                    <>
+                                      <MdExpandMore></MdExpandMore>
+                                    </>
+                                  )
+                                }
+                                {
+                                  !hideBody1 && (
+                                    <>
+                                      <MdExpandLess></MdExpandLess>
+                                    </>
+                                  )
+                                }
+                              </Button>
+                            </Col>
+                          </Row>
+                        </Container>
                       </Card.Header>
-                      <Card.Body>
+                      <Card.Body hidden={hideBody1}>
                         {
                           dataFromOrdersByState && (
                             <>
@@ -631,9 +659,33 @@ function App() {
                       text={'white'}
                     >
                       <Card.Header>
-                        Orders in routes
+                        <Container fluid>
+                          <Row>
+                            <Col lg="11">
+                              Orders in routes
+                            </Col>
+                            <Col lg="1">
+                              <Button onClick={() => { setHideBody2(!hideBody2) }} className="btn-sm btn-dark bg-transparent">
+                                {
+                                  hideBody2 && (
+                                    <>
+                                      <MdExpandMore></MdExpandMore>
+                                    </>
+                                  )
+                                }
+                                {
+                                  !hideBody2 && (
+                                    <>
+                                      <MdExpandLess></MdExpandLess>
+                                    </>
+                                  )
+                                }
+                              </Button>
+                            </Col>
+                          </Row>
+                        </Container>
                       </Card.Header>
-                      <Card.Body>
+                      <Card.Body hidden={hideBody2}>
                         <Table variant="dark" striped bordered hover size="sm">
                           <thead>
                             <tr>
@@ -727,9 +779,33 @@ function App() {
                       text={'white'}
                     >
                       <Card.Header>
-                        Orders with some value in field
+                        <Container fluid>
+                          <Row>
+                            <Col lg="11">
+                              Orders with some value in field
+                            </Col>
+                            <Col lg="1">
+                              <Button onClick={() => { setHideBody3(!hideBody3) }} className="btn-sm btn-dark bg-transparent">
+                                {
+                                  hideBody3 && (
+                                    <>
+                                      <MdExpandMore></MdExpandMore>
+                                    </>
+                                  )
+                                }
+                                {
+                                  !hideBody3 && (
+                                    <>
+                                      <MdExpandLess></MdExpandLess>
+                                    </>
+                                  )
+                                }
+                              </Button>
+                            </Col>
+                          </Row>
+                        </Container>
                       </Card.Header>
-                      <Card.Body>
+                      <Card.Body hidden={hideBody3}>
                         <Table variant="dark" striped bordered hover size="sm">
                           <thead>
                             <tr>
