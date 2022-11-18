@@ -12,6 +12,7 @@ function App() {
   const [dataFromReadResult, setDataFromReadResult] = useState()
   const [dataFromOrdersByState, setDataOrdersByState] = useState()
   const [dataFromOrdersInRoutes, setDataOrdersInRoutes] = useState()
+  const [dataFromOrdersWithDataInField, setDataOrdersWithDataInField] = useState()
   const [show, setShow] = useState(false)
   const [isConnected, setIsConnected] = useState(false)
   const [messageConnected, setMessageConnected] = useState('')
@@ -210,6 +211,56 @@ function App() {
       if (result.status === 200) {
 
         setDataOrdersInRoutes(result)
+
+      } else {
+
+        setIsConnected(false)
+        setShowAlertForServiceError(true)
+
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            setShowAlertForServiceError(false)
+            resolve();
+          }, 4000)
+        });
+
+      }
+
+    } else {
+
+      setShowAlertForServiceError(false)
+      setShowAlertForDisconnected(true)
+
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          setShowAlertForDisconnected(false)
+          resolve();
+        }, 2000)
+      });
+
+    }
+
+  }
+
+  const getOrdersWithDateInField = async () => {
+
+    if (isConnected) {
+
+      const result = {}
+
+      const res = await axios.get('orders/managment/field').then((response) => {
+        result.data = response.data.response
+        result.status = response.status
+      }).catch((error) => {
+        if (error.response) {
+          result.message = error.response.data.response
+          result.status = error.response.status
+        }
+      })
+
+      if (result.status === 200) {
+
+        setDataOrdersWithDataInField(result)
 
       } else {
 
@@ -667,6 +718,97 @@ function App() {
                     </Card>
                   </Col>
                 </Row>
+
+                <Row>
+                  <Col className="mb-2 mt-2" lg="12">
+                    <Card
+                      bg="dark"
+                      key={"dark"}
+                      text={'white'}
+                    >
+                      <Card.Header>
+                        Orders with some value in field
+                      </Card.Header>
+                      <Card.Body>
+                        <Table variant="dark" striped bordered hover size="sm">
+                          <thead>
+                            <tr>
+                              <th>SO Number</th>
+                              <th>Supply Access</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {
+                              dataFromOrdersWithDataInField && dataFromOrdersWithDataInField.data && (
+                                <>
+                                  {
+                                    dataFromOrdersWithDataInField.data.map((item) => {
+                                      return (
+                                        <tr>
+                                          <td>{item.so_number}</td>
+                                          <td>{item.supply_access}</td>
+                                        </tr>
+                                      )
+                                    })
+                                  }
+                                </>
+                              )
+                            }
+                            {
+                              !dataFromOrdersWithDataInField && (
+                                <>
+                                  {
+                                    <tr className="text-center">
+                                      <td colSpan={5}>No data found</td>
+                                    </tr>
+                                  }
+                                </>
+                              )
+                            }
+                            {
+                              dataFromOrdersWithDataInField && dataFromOrdersWithDataInField.data.length <= 0 && (
+                                <>
+                                  {
+                                    <tr className="text-center">
+                                      <td colSpan={5}>No data found</td>
+                                    </tr>
+                                  }
+                                </>
+                              )
+                            }
+                          </tbody>
+                        </Table>
+                        {
+                          !dataFromOrdersWithDataInField && (
+                            <>
+                              <Container>
+                                <Row>
+                                  <Col className="text-center" lg="12">
+                                    <Button className="btn-sm" onClick={getOrdersWithDateInField} variant="secondary">View data</Button>
+                                  </Col>
+                                </Row>
+                              </Container>
+                            </>
+                          )
+                        }
+                        {
+                          dataFromOrdersWithDataInField && dataFromOrdersWithDataInField.data && (
+                            <>
+                              <Container>
+                                <Row>
+                                  <Col className="text-center" lg="12">
+                                    <Button className="btn-sm" onClick={getOrdersWithDateInField} variant="secondary">Refresh data</Button>
+                                  </Col>
+                                </Row>
+                              </Container>
+                            </>
+                          )
+                        }
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+
               </Container>
             </Col>
           </Row>
