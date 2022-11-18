@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from routes import routes as Routes
 from utils import file_writer as FileWriter
 from utils import file_reader as FileReader
+from database.controllers import orders_controller as OrdersController
 from security.routes import auth
 
 _service = Flask(__name__)
@@ -43,6 +44,32 @@ def read_line():
     try:
         
         _response_from_module, _message = FileReader.read_in_txt_file()
+        
+        if _response_from_module:
+            
+            _code_response = 200
+            
+        else:
+            
+            _code_response = 500
+            
+        _result = {
+            'response': _message
+        }
+            
+        return jsonify(_result), _code_response
+        
+    except Exception as e:
+        
+        pass
+    
+    
+@_service.route(Routes.get_a_specific_route(route_name = "GET_ORDERS_BY_STATUS"))
+def get_orders_by_status():
+    
+    try:
+        
+        _response_from_module, _message = OrdersController.get_orders_by_status()
         
         if _response_from_module:
             

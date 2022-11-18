@@ -2,5 +2,6 @@
     "WRITE_LINE": "write/txt",
     "READ_LINE": "read/txt",
     "CREATE_TOKEN": "create/token",
-    "VERIFY_TOKEN": "verify/token"
+    "VERIFY_TOKEN": "verify/token",
+    "GET_ORDERS_BY_STATUS": "orders/managment/status"
 }

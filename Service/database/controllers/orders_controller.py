@@ -1,0 +1,25 @@
+from database.utils import sqlite_client as SqlLiteClient
+
+
+def get_orders_by_status():
+    
+    try:
+        
+        _query = 'SELECT COUNT(*), ESTADO FROM ORDENES GROUP BY ESTADO'
+        
+        _res = SqlLiteClient.execute_query(_query)
+        
+        _lst_result = []
+        
+        for r in _res:
+            
+            _lst_result.append({
+                'count': r[0],
+                'status': r[1]
+            })
+            
+        return True,_lst_result
+        
+    except Exception as e:
+        
+        return False, 'A problem has occurred in the database module...'
