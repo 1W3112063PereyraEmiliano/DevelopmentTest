@@ -52,3 +52,29 @@ def get_orders_in_routes():
     except Exception as e:
         
         return False, 'A problem has occurred in the database module...'
+    
+
+def get_orders_with_data_in_field():
+    
+    try:
+        
+        _query = 'SELECT NUM_OS, ACCESO_SUMINISTRO '\
+                    'FROM ORDENES '\
+                        'WHERE ACCESO_SUMINISTRO != "" AND ACCESO_SUMINISTRO IS NOT NULL'
+        
+        _res = SqlLiteClient.execute_query(_query)
+        
+        _lst_result = []
+        
+        for r in _res:
+            
+            _lst_result.append({
+                'so_number': r[0],
+                'supply_access': r[1],
+            })
+            
+        return True,_lst_result
+        
+    except Exception as e:
+        
+        return False, 'A problem has occurred in the database module...'

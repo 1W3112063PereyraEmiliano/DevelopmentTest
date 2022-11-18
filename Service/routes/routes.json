@@ -4,5 +4,6 @@
     "CREATE_TOKEN": "create/token",
     "VERIFY_TOKEN": "verify/token",
     "GET_ORDERS_BY_STATUS": "orders/managment/status",
-    "GET_ORDERS_IN_ROUTES": "orders/managment/routes"
+    "GET_ORDERS_IN_ROUTES": "orders/managment/routes",
+    "GET_ORDERS_WITH_DATA_IN_FIELD": "orders/managment/field"
 }
