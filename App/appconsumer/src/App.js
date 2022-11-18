@@ -10,6 +10,7 @@ function App() {
   const [text, setText] = useState('');
   const [dataFromResult, setDataFromResult] = useState()
   const [dataFromReadResult, setDataFromReadResult] = useState()
+  const [dataFromOrdersByState, setDataOrdersByState] = useState()
   const [show, setShow] = useState(false)
   const [isConnected, setIsConnected] = useState(false)
   const [messageConnected, setMessageConnected] = useState('')
@@ -63,6 +64,7 @@ function App() {
 
         setIsConnected(false)
         setShowAlertForServiceError(true)
+
         return new Promise((resolve) => {
           setTimeout(() => {
             setShowAlertForServiceError(false)
@@ -112,6 +114,7 @@ function App() {
 
         setIsConnected(false)
         setShowAlertForServiceError(true)
+
         return new Promise((resolve) => {
           setTimeout(() => {
             setShowAlertForServiceError(false)
@@ -124,6 +127,56 @@ function App() {
 
     } else {
 
+      setShowAlertForDisconnected(true)
+
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          setShowAlertForDisconnected(false)
+          resolve();
+        }, 2000)
+      });
+
+    }
+
+  }
+
+  const getOrdersByState = async () => {
+
+    if (isConnected) {
+
+      const result = {}
+
+      const res = await axios.get('orders/managment/status').then((response) => {
+        result.data = response.data.response
+        result.status = response.status
+      }).catch((error) => {
+        if (error.response) {
+          result.message = error.response.data.response
+          result.status = error.response.status
+        }
+      })
+
+      if (result.status === 200) {
+
+        setDataOrdersByState(result)
+
+      } else {
+
+        setIsConnected(false)
+        setShowAlertForServiceError(true)
+
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            setShowAlertForServiceError(false)
+            resolve();
+          }, 4000)
+        });
+
+      }
+
+    } else {
+
+      setShowAlertForServiceError(false)
       setShowAlertForDisconnected(true)
 
       return new Promise((resolve) => {
@@ -236,24 +289,48 @@ function App() {
   return (
     <div>
       <header className="App-header">
-        <h3>
-          App Consumer <Button variant="dark" onClick={canConnect}>
-            {
-              isConnected && (
-                <>
-                  {messageConnected} <Badge bg="success"> <GiConfirmed></GiConfirmed> </Badge>
-                </>
-              )
-            }
-            {
-              !isConnected && (
-                <>
-                  Disconnected <Badge bg="danger"> <GiCancel></GiCancel> </Badge>
-                </>
-              )
-            }
-          </Button>
-        </h3>
+        <Container fluid>
+          <Row>
+            <Col lg="8">
+              <h3>
+                App Consumer <Button variant="dark" onClick={canConnect}>
+                  {
+                    isConnected && (
+                      <>
+                        {messageConnected} <Badge bg="success"> <GiConfirmed></GiConfirmed> </Badge>
+                      </>
+                    )
+                  }
+                  {
+                    !isConnected && (
+                      <>
+                        Disconnected <Badge bg="danger"> <GiCancel></GiCancel> </Badge>
+                      </>
+                    )
+                  }
+                </Button>
+              </h3>
+            </Col>
+            <Col lg="4">
+              <Row>
+                <Col md="12">
+                  <Alert show={showAlertForDisconnected} key={'warning'} variant={'warning'}>
+                    <h6>You're not online!</h6>
+                  </Alert>
+                </Col>
+              </Row>
+              <Row>
+                <Col md="12">
+                  <Alert show={showAlertForServiceError} key={'danger'} variant={'danger'}>
+                    <h6>
+                      Could not establish connection with the Service, are you sure that it is turned on?
+                    </h6>
+                  </Alert>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       </header>
       <div className="bg-grey">
         <Container fluid>
@@ -261,7 +338,7 @@ function App() {
             <Col lg="4">
               <Container fluid>
                 <Row>
-                  <Col className="mb-2" lg="12">
+                  <Col className="mb-2 mt-2" lg="12">
                     <Form.Group className="mb-3">
                       <Form.Label className="text-light">Type text to write in .txt</Form.Label>
                       <Form.Check
@@ -315,24 +392,6 @@ function App() {
                     </>
                   )
                 }
-                <Row>
-                  <Col md="12">
-                    <Alert show={showAlertForDisconnected} key={'warning'} variant={'warning'}>
-                      <h6>
-                        You're not online!
-                      </h6>
-                    </Alert>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md="12">
-                    <Alert show={showAlertForServiceError} key={'danger'} variant={'danger'}>
-                      <h6>
-                        Could not establish connection with the Service, are you sure that it is turned on?
-                      </h6>
-                    </Alert>
-                  </Col>
-                </Row>
               </Container>
 
               <Container fluid className="mt-1">
@@ -398,10 +457,76 @@ function App() {
                 </Row>
               </Container>
             </Col>
+
+            <Col lg="8">
+              <Container fluid>
+                <Row>
+                  <Col className="mb-2 mt-2" lg="12">
+                    <Form.Group>
+                      <Form.Label className="text-light">Order Management</Form.Label>
+                    </Form.Group>
+                    <Card
+                      bg="dark"
+                      key={"dark"}
+                      text={'white'}
+                    >
+                      <Card.Header>
+                        Number of orders by state
+                      </Card.Header>
+                      <Card.Body>
+                        {
+                          dataFromOrdersByState && (
+                            <>
+                              <Container fluid>
+                                {
+                                  dataFromOrdersByState.data.map((item) => {
+                                    return (
+                                      <div key={item.status}>
+                                        <Row>
+                                          <Col lg="11" md="11">
+                                            Estado {item.status}
+                                          </Col>
+                                          <Col className="text-info" lg="1" md="1">
+                                            {item.count}
+                                          </Col>
+                                        </Row>
+                                      </div>
+                                    )
+                                  })
+                                }
+                                <Row>
+                                  <Col className="text-center" lg="12">
+                                    <Button className="btn-sm" onClick={getOrdersByState} variant="secondary">Refresh data</Button>
+                                  </Col>
+                                </Row>
+                              </Container>
+                            </>
+                          )
+                        }
+                        {
+                          !dataFromOrdersByState && (
+                            <>
+                              <Container>
+                                <Row>
+                                  <Col className="text-center" lg="12">
+                                    <Button className="btn-sm" onClick={getOrdersByState} variant="secondary">View data</Button>
+                                  </Col>
+                                </Row>
+                              </Container>
+                            </>
+                          )
+                        }
+
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+              </Container>
+            </Col>
           </Row>
         </Container>
       </div>
-    </div >
+    </div>
   );
 }
 
