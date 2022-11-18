@@ -686,7 +686,7 @@ function App() {
                         </Container>
                       </Card.Header>
                       <Card.Body hidden={hideBody2}>
-                        <Table variant="dark" striped bordered hover size="sm">
+                        <Table responsive variant="dark" striped bordered hover size="sm">
                           <thead>
                             <tr>
                               <th>SO Number</th>
