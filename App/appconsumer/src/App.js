@@ -1,6 +1,6 @@
 import './App.css';
 import { useState } from 'react';
-import { Badge, Col, Container, Row, Button, Form, Alert, Card } from 'react-bootstrap'
+import { Badge, Col, Container, Row, Button, Form, Alert, Card, Table } from 'react-bootstrap'
 import { FiSend } from 'react-icons/fi'
 import { GiConfirmed, GiCancel } from 'react-icons/gi'
 import axios from 'axios';
@@ -11,6 +11,7 @@ function App() {
   const [dataFromResult, setDataFromResult] = useState()
   const [dataFromReadResult, setDataFromReadResult] = useState()
   const [dataFromOrdersByState, setDataOrdersByState] = useState()
+  const [dataFromOrdersInRoutes, setDataOrdersInRoutes] = useState()
   const [show, setShow] = useState(false)
   const [isConnected, setIsConnected] = useState(false)
   const [messageConnected, setMessageConnected] = useState('')
@@ -159,6 +160,56 @@ function App() {
       if (result.status === 200) {
 
         setDataOrdersByState(result)
+
+      } else {
+
+        setIsConnected(false)
+        setShowAlertForServiceError(true)
+
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            setShowAlertForServiceError(false)
+            resolve();
+          }, 4000)
+        });
+
+      }
+
+    } else {
+
+      setShowAlertForServiceError(false)
+      setShowAlertForDisconnected(true)
+
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          setShowAlertForDisconnected(false)
+          resolve();
+        }, 2000)
+      });
+
+    }
+
+  }
+
+  const getOrdersInRoutes = async () => {
+
+    if (isConnected) {
+
+      const result = {}
+
+      const res = await axios.get('orders/managment/routes').then((response) => {
+        result.data = response.data.response
+        result.status = response.status
+      }).catch((error) => {
+        if (error.response) {
+          result.message = error.response.data.response
+          result.status = error.response.status
+        }
+      })
+
+      if (result.status === 200) {
+
+        setDataOrdersInRoutes(result)
 
       } else {
 
@@ -516,7 +567,102 @@ function App() {
                             </>
                           )
                         }
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
 
+                <Row>
+                  <Col className="mb-2 mt-2" lg="12">
+                    <Card
+                      bg="dark"
+                      key={"dark"}
+                      text={'white'}
+                    >
+                      <Card.Header>
+                        Orders in routes
+                      </Card.Header>
+                      <Card.Body>
+                        <Table variant="dark" striped bordered hover size="sm">
+                          <thead>
+                            <tr>
+                              <th>SO Number</th>
+                              <th>Route Itin</th>
+                              <th>Route</th>
+                              <th>Address</th>
+                              <th>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {
+                              dataFromOrdersInRoutes && dataFromOrdersInRoutes.data && (
+                                <>
+                                  {
+                                    dataFromOrdersInRoutes.data.map((item) => {
+                                      return (
+                                        <tr>
+                                          <td>{item.so_number}</td>
+                                          <td>{item.route_itinerary}</td>
+                                          <td>{item.route}</td>
+                                          <td>{item.address}</td>
+                                          <td>{item.status}</td>
+                                        </tr>
+                                      )
+                                    })
+                                  }
+                                </>
+                              )
+                            }
+                            {
+                              !dataFromOrdersInRoutes && (
+                                <>
+                                  {
+                                    <tr className="text-center">
+                                      <td colSpan={5}>No data found</td>
+                                    </tr>
+                                  }
+                                </>
+                              )
+                            }
+                            {
+                              dataFromOrdersInRoutes && dataFromOrdersInRoutes.data.length <= 0 && (
+                                <>
+                                  {
+                                    <tr className="text-center">
+                                      <td colSpan={5}>No data found</td>
+                                    </tr>
+                                  }
+                                </>
+                              )
+                            }
+                          </tbody>
+                        </Table>
+                        {
+                          !dataFromOrdersInRoutes && (
+                            <>
+                              <Container>
+                                <Row>
+                                  <Col className="text-center" lg="12">
+                                    <Button className="btn-sm" onClick={getOrdersInRoutes} variant="secondary">View data</Button>
+                                  </Col>
+                                </Row>
+                              </Container>
+                            </>
+                          )
+                        }
+                        {
+                          dataFromOrdersInRoutes && dataFromOrdersInRoutes.data && (
+                            <>
+                              <Container>
+                                <Row>
+                                  <Col className="text-center" lg="12">
+                                    <Button className="btn-sm" onClick={getOrdersInRoutes} variant="secondary">Refresh data</Button>
+                                  </Col>
+                                </Row>
+                              </Container>
+                            </>
+                          )
+                        }
                       </Card.Body>
                     </Card>
                   </Col>
