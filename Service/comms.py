@@ -90,6 +90,31 @@ def get_orders_by_status():
         pass
 
 
+@_service.route(Routes.get_a_specific_route(route_name = "GET_ORDERS_IN_ROUTES"))
+def get_orders_in_routes():
+    
+    try:
+        
+        _response_from_module, _message = OrdersController.get_orders_in_routes()
+        
+        if _response_from_module:
+            
+            _code_response = 200
+            
+        else:
+            
+            _code_response = 500
+            
+        _result = {
+            'response': _message
+        }
+            
+        return jsonify(_result), _code_response
+        
+    except Exception as e:
+        
+        pass
+
 if __name__.__eq__('__main__'):
     
     _service.run(debug=False,load_dotenv=False,port=8000)
