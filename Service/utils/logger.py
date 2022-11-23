@@ -12,7 +12,7 @@ def get_base_dir():
 
 def config_logger():
     
-    base_dir = os.path.join(get_base_dir(),'test/log/DevlopmentTest.log')
+    base_dir = os.path.join(get_base_dir(),'test/log/DevelopmentTest.log')
     
     logging.basicConfig(
             level=logging.DEBUG,
