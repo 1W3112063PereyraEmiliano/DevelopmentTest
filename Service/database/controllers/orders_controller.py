@@ -1,4 +1,7 @@
 from database.utils import sqlite_client as SqlLiteClient
+from utils.logger import *
+
+config_logger()
 
 
 def get_orders_by_status():
@@ -21,6 +24,8 @@ def get_orders_by_status():
         return True,_lst_result
         
     except Exception as e:
+        
+        log_error('Excepción en archivo {} error {}'.format(__file__, e.__str__()))
         
         return False, 'A problem has occurred in the database module...'
     
@@ -51,6 +56,8 @@ def get_orders_in_routes():
         
     except Exception as e:
         
+        log_error('Excepción en archivo {} error {}'.format(__file__, e.__str__()))
+        
         return False, 'A problem has occurred in the database module...'
     
 
@@ -76,5 +83,7 @@ def get_orders_with_data_in_field():
         return True,_lst_result
         
     except Exception as e:
+        
+        log_error('Excepción en archivo {} error {}'.format(__file__, e.__str__()))
         
         return False, 'A problem has occurred in the database module...'

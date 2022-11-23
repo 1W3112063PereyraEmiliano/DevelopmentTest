@@ -1,5 +1,8 @@
 from pathlib import Path
 import os
+from utils import logger as Logger
+
+Logger.config_logger()
 
 
 def _get_base_dir():
@@ -23,6 +26,6 @@ def read_in_txt_file(txt = ''):
         
     except Exception as e:
         
-        #lg
+        Logger.log_error('Excepción en archivo {} error {}'.format(__file__, e.__str__()))
         
         return False, 'A problem has occurred in the file reader module...'

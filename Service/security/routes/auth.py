@@ -2,8 +2,10 @@ from flask import Blueprint, request, jsonify
 from security.token_writer import write_token
 from security.token_checker import validate_token
 from routes.routes import get_a_specific_route
+from utils import logger as Logger
 
 routes_auth = Blueprint("routes_auth",__name__)
+Logger.config_logger()
 
 
 @routes_auth.route(get_a_specific_route(route_name = "CREATE_TOKEN"), methods=["POST"])
@@ -31,7 +33,8 @@ def verify_token():
         
         return validate_token(token, output=True)
     
-    except:
+    except Exception as e:
         
-        pass
+        Logger.log_error('Excepción en archivo {} error {}'.format(__file__, e.__str__()))
+        
 

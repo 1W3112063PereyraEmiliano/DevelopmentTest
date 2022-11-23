@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
 from datetime import datetime
+from utils import logger as Logger
+
+Logger.config_logger()
 
 
 def _get_base_dir():
@@ -36,6 +39,6 @@ def write_in_txt_file(txt = '',add_date = False):
         
     except Exception as e:
         
-        #lg
+        Logger.log_error('Excepción en archivo {} error {}'.format(__file__, e.__str__()))
         
         return False, 'A problem has occurred in the text writer module...'

@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
 import sqlite3
+from utils.logger import *
+
+config_logger()
 
 
 def _get_base_dir():
@@ -23,10 +26,12 @@ def _connect_with_db():
     
     except sqlite3.Error as e:
         
-        # log 
-        
-        pass
+        log_error('Excepción en archivo {} error {}'.format(__file__, e.__str__()))
     
+    except Exception as e:
+        
+        log_error('Excepción en archivo {} error {}'.format(__file__, e.__str__()))
+
 
 def execute_query(query : str):
     
@@ -52,9 +57,11 @@ def execute_query(query : str):
     
     except sqlite3.Error as e:
 
-       #log
+       log_error('Excepción en archivo {} error {}'.format(__file__, e.__str__()))
+       
+    except Exception as e:
         
-        pass
+        log_error('Excepción en archivo {} error {}'.format(__file__, e.__str__()))
     
     finally:
         

@@ -1,6 +1,9 @@
 
 from routes.utils.route_utils import open_route_file
-    
+from utils.logger import *
+
+config_logger()
+
 
 def get_a_specific_route(**kwargs):
 
@@ -12,9 +15,9 @@ def get_a_specific_route(**kwargs):
         
         return '/{}'.format(route)
     
-    except KeyError:
+    except Exception as e:
         
-        #log .txt
-        
-        pass 
+        log_critical('Excepción en archivo {} error {}'.format(__file__, e.__str__()))
+
+
     

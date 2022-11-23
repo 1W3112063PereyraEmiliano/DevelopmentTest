@@ -1,5 +1,8 @@
 from jwt import encode
 from datetime import datetime, timedelta
+from utils import logger as Logger
+
+Logger.config_logger()
 
 
 def expire_date(secs: int):
@@ -18,9 +21,10 @@ def write_token(data: dict):
         
         return token.encode('UTF-8')
     
-    except:
+    except Exception as e:
         
-        pass
+        Logger.log_error('Excepción en archivo {} error {}'.format(__file__, e.__str__()))
+
 
 
 
