@@ -444,7 +444,7 @@ function App() {
             <Col xxl="4" xl="4" lg="4" md="12" sm="12" xs="12">
               <Container fluid>
                 <Row>
-                  <Col className="mb-2 mt-2" xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
+                  <Col className="mb-2 mt-2" xxl="12" xl="12" lg="12" md="6" sm="12" xs="12">
                     <Form.Group className="mb-3">
                       <Form.Label className="text-light">Type text to write in .txt</Form.Label>
                       <Form.Check
@@ -457,52 +457,47 @@ function App() {
                       />
                       <Form.Control maxLength={256} value={text} onChange={handleChange} as="textarea" rows={3} />
                     </Form.Group>
-                    <div className="d-grid gap-2">
+                    <div className="d-grid gap-2 mb-3">
                       <Button onClick={writeInFile} variant="secondary"> <FiSend></FiSend> Submit</Button>
                     </div>
+                    {
+                      dataFromResult && (
+                        <>
+                          {
+                            dataFromResult.status === 200 && (
+                              <>
+                                <Row>
+                                  <Col xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
+                                    <Alert show={show} key={'success'} variant={'success'}>
+                                      <h6>
+                                        {dataFromResult.message}
+                                      </h6>
+                                    </Alert>
+                                  </Col>
+                                </Row>
+                              </>
+                            )
+                          }
+                          {
+                            dataFromResult.status === 500 && (
+                              <>
+                                <Row>
+                                  <Col xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
+                                    <Alert show={show} key={'danger'} variant={'danger'}>
+                                      <h6>
+                                        {dataFromResult.message}
+                                      </h6>
+                                    </Alert>
+                                  </Col>
+                                </Row>
+                              </>
+                            )
+                          }
+                        </>
+                      )
+                    }
                   </Col>
-                </Row>
-                {
-                  dataFromResult && (
-                    <>
-                      {
-                        dataFromResult.status === 200 && (
-                          <>
-                            <Row>
-                              <Col xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
-                                <Alert show={show} key={'success'} variant={'success'}>
-                                  <h6>
-                                    {dataFromResult.message}
-                                  </h6>
-                                </Alert>
-                              </Col>
-                            </Row>
-                          </>
-                        )
-                      }
-                      {
-                        dataFromResult.status === 500 && (
-                          <>
-                            <Row>
-                              <Col xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
-                                <Alert show={show} key={'danger'} variant={'danger'}>
-                                  <h6>
-                                    {dataFromResult.message}
-                                  </h6>
-                                </Alert>
-                              </Col>
-                            </Row>
-                          </>
-                        )
-                      }
-                    </>
-                  )
-                }
-              </Container>
-
-              <Container fluid className="mt-1">
-                <Row>
-                  <Col xxl="12" xl="12" lg="12" md="12" sm="12" xs="12">
+                  <Col className="mb-2 mt-2" xxl="12" xl="12" lg="12" md="6" sm="12" xs="12">
                     <Form.Group className="mb-3">
                       <Form.Label className="text-light">Read text from .txt</Form.Label>
                       {
