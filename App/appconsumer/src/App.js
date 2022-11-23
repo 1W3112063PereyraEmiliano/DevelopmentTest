@@ -20,9 +20,9 @@ function App() {
   const [showAlertForDisconnected, setShowAlertForDisconnected] = useState(false)
   const [showAlertForServiceError, setShowAlertForServiceError] = useState(false)
   const [addDate, setAddDate] = useState(false)
-  const [hideBody1, setHideBody1] = useState(false)
-  const [hideBody2, setHideBody2] = useState(false)
-  const [hideBody3, setHideBody3] = useState(false)
+  const [hideBody1, setHideBody1] = useState(true)
+  const [hideBody2, setHideBody2] = useState(true)
+  const [hideBody3, setHideBody3] = useState(true)
   let token = ''
 
   const handleChange = event => {
