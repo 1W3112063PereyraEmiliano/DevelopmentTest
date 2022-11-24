@@ -44,7 +44,7 @@ The npm's version was 6.14.15.
 The npx's version was 6.14.15.
 
 *Nvm*
-The npx's version was 0.39.1.
+The nvm's version was 0.39.1.
 ### Initial Configuration
 
 Install all node modules from package.json file. 
